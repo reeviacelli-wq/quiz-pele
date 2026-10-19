@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}</style>
+<title>Skin Intelligence HomeCare</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: uma coluna estreita, uma pergunta por tela (feito para abrir pelo celular, via Instagram). */
+:root {
+  --bg: #F1E9DA;
+  --surface: #FAF6EE;
+  --ink: #2B2218;
+  --muted: #6F6350;
+  --gold: #9A7230;
+  --gold-soft: #E7D8B6;
+  --line: #DACDB5;
+  --on-gold: #FFFFFF;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1B1611; --surface: #251F18; --ink: #F1E7D5; --muted: #B3A48A;
+    --gold: #D4B070; --gold-soft: #3A2F1F; --line: #3A3126; --on-gold: #1B1611;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1B1611; --surface: #251F18; --ink: #F1E7D5; --muted: #B3A48A;
+  --gold: #D4B070; --gold-soft: #3A2F1F; --line: #3A3126; --on-gold: #1B1611;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-block: 20px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.mono {
+  width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--gold);
+  display: grid; place-items: center; font-family: var(--font-display);
+  font-size: 24px; font-weight: 600; color: var(--gold); flex: none;
+}
+.brand span { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.08; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(38px, 9vw, 56px); }
+h2 { font-size: clamp(28px, 6.5vw, 36px); }
+h3 { font-size: 24px; }
+p { margin: 0; }
+.lead { font-size: 18px; color: var(--muted); max-width: 52ch; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+label.field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--muted); }
+input[type=text] {
+  font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 10px; padding: 14px; width: 100%;
+}
+.btn {
+  font: inherit; font-weight: 500; cursor: pointer; text-decoration: none; text-align: center;
+  background: var(--gold); color: var(--on-gold); border: 1px solid var(--gold);
+  border-radius: 10px; padding: 14px 20px; display: inline-block;
+}
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.small { padding: 9px 14px; font-size: 14px; white-space: nowrap; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.progress { display: flex; flex-direction: column; gap: 8px; }
+.bar { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--gold); width: 0; transition: width .3s ease; }
+.count { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt {
+  font: inherit; text-align: left; cursor: pointer; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px;
+  min-height: 56px; display: flex; align-items: center;
+}
+.opt:hover { border-color: var(--gold); }
+.opt[aria-pressed="true"] { border-color: var(--gold); background: var(--gold-soft); }
+.nav { display: flex; justify-content: space-between; gap: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 13px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--gold); color: var(--gold); }
+.kicker { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+.tips { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--muted); }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.item { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+.item:first-child { border-top: 0; }
+.info { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.etapa { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.info strong { font-weight: 500; overflow-wrap: anywhere; }
+.info small { color: var(--muted); font-size: 14px; }
+.soon { font-size: 13px; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 12px; white-space: nowrap; }
+.fine { font-size: 13px; color: var(--muted); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.cta-row .btn, .cta-row .soon { flex: 1 1 200px; text-align: center; }
+@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+</style>
+
+</head>
+<body>
+<main class="wrap">
+  <div class="brand"><div class="mono" aria-hidden="true">R</div><span>Dra. Renata Biolchi</span></div>
+
+  <section id="intro" class="wrap" style="gap:24px">
+    <h1>Skin Intelligence HomeCare</h1>
+    <p class="lead">Pele não se trata por tentativa. Se trata com inteligência. Responda 11 perguntas rápidas e descubra seu tipo de pele e os produtos certos para a sua rotina.</p>
+    <div class="card">
+      <label class="field" for="nome">Como posso te chamar? (opcional)
+        <input id="nome" type="text" autocomplete="given-name" maxlength="40" placeholder="Seu nome">
+      </label>
+      <button class="btn" id="start" type="button">Começar o diagnóstico</button>
+      <p class="fine">Leva cerca de 2 minutos.</p>
+    </div>
+  </section>
+
+  <section id="quiz" class="wrap" style="gap:20px" hidden>
+    <div class="progress">
+      <div class="count" id="count"></div>
+      <div class="bar"><i id="fill"></i></div>
+    </div>
+    <h2 id="qtitle"></h2>
+    <div class="opts" id="opts"></div>
+    <div class="nav"><button class="btn ghost" id="back" type="button">Voltar</button></div>
+  </section>
+
+  <section id="result" class="wrap" style="gap:24px" hidden>
+    <div class="card">
+      <span class="kicker" id="rkicker"></span>
+      <h2 id="rtype"></h2>
+      <p id="rdesc" class="lead"></p>
+      <div class="chips" id="rchips"></div>
+    </div>
+    <div class="card" id="rhabits-card">
+      <h3>Hábitos que mudam a sua pele</h3>
+      <ul class="tips" id="rhabits"></ul>
+    </div>
+    <div class="card">
+      <h3>Sua rotina indicada</h3>
+      <ul class="list" id="rbase"></ul>
+      <p class="fine">Publicidade: links de afiliado.</p>
+    </div>
+    <div class="card" id="rfocus-card">
+      <h3>Para os seus pontos de atenção</h3>
+      <ul class="list" id="rfocus"></ul>
+    </div>
+    <div class="card" id="rcta">
+      <h3>Quer um protocolo só seu?</h3>
+      <p class="lead">Este resultado é um ponto de partida. Na consulta, a Dra. Renata avalia a sua pele e monta o plano individual. Você escolhe: online, de onde estiver, ou presencial, no consultório em Balneário Camboriú.</p>
+      <div class="cta-row" id="rcta-btns"></div>
+    </div>
+    <button class="btn ghost" id="again" type="button">Refazer o diagnóstico</button>
+    <p class="fine">Este diagnóstico é educativo e não substitui a avaliação com um profissional.</p>
+  </section>
+</main>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO DA DRA. RENATA
+   1) Cole o link de afiliado da Shopee em cada "link".
+      Enquanto o link estiver vazio (""), aparece "Link em breve".
+   2) Os produtos abaixo são sugestões de marcas originais.
+      Troque pelos que você realmente indica.
+   3) Links de consulta: cole o link do WhatsApp ou da agenda de cada
+      modalidade. Enquanto estiver vazio, aparece "Link em breve".
+   ============================================================ */
+var AGENDA_ONLINE_URL = "https://wa.me/5554999136522?text=" + encodeURIComponent("Oi, Dra. Renata! Fiz o diagnóstico de pele e quero agendar uma consulta online.");
+var AGENDA_PRESENCIAL_URL = "https://wa.me/5554999136522?text=" + encodeURIComponent("Oi, Dra. Renata! Fiz o diagnóstico de pele e quero agendar uma consulta presencial.");
+
+var PRODUTOS = {
+  oleosa: [
+    { etapa: "Limpeza", nome: "Gel de Limpeza Facial", marca: "Principia", uso: "manhã e noite", link: "https://s.shopee.com.br/7AeSN1T5zm" },
+    { etapa: "Hidratação", nome: "Hydro Boost (gel)", marca: "Neutrogena", uso: "manhã e noite", link: "https://s.shopee.com.br/2LZCce8Afo" },
+    { etapa: "Proteção solar", nome: "Relief Sun Rice + Probiotics FPS 50+", marca: "Beauty of Joseon", uso: "todas as manhãs, reaplicar", link: "https://s.shopee.com.br/BUi3OkmG6" },
+    { etapa: "Tratamento", nome: "TXA Trace Toning Serum 30 ml", marca: "Medicube", uso: "à noite", link: "https://s.shopee.com.br/6fiBqEbeMY" }
+  ],
+  seca: [
+    { etapa: "Limpeza", nome: "Gel de Limpeza Suave", marca: "Simple Organic", uso: "manhã e noite", link: "https://s.shopee.com.br/4VdhGn1R28" },
+    { etapa: "Hidratação", nome: "Water Bank Blue Hyaluronic Cream", marca: "Laneige", uso: "manhã e noite", link: "https://s.shopee.com.br/9066dMYEGy" },
+    { etapa: "Proteção solar", nome: "Relief Sun Rice + Probiotics FPS 50+", marca: "Beauty of Joseon", uso: "todas as manhãs, reaplicar", link: "https://s.shopee.com.br/BUi3OkmG6" },
+    { etapa: "Tratamento", nome: "Dive-In, sérum de ácido hialurônico", marca: "Torriden", uso: "manhã e noite, sob o hidratante", link: "https://s.shopee.com.br/1W05hfl9uy" }
+  ],
+  mista: [
+    { etapa: "Limpeza", nome: "Low pH Good Morning Gel Cleanser", marca: "COSRX", uso: "manhã e noite", link: "https://s.shopee.com.br/3B8JgqpFs9" },
+    { etapa: "Hidratação", nome: "Hydro Boost (gel)", marca: "Neutrogena", uso: "manhã e noite", link: "https://s.shopee.com.br/2LZCce8Afo" },
+    { etapa: "Proteção solar", nome: "Hyaluronic Acid Watery Sun Gel", marca: "Isntree", uso: "todas as manhãs, reaplicar", link: "https://s.shopee.com.br/BUi7Twpj8" },
+    { etapa: "Tratamento", nome: "TXA Trace Toning Serum 30 ml", marca: "Medicube", uso: "à noite, com foco na zona T", link: "https://s.shopee.com.br/6fiBqEbeMY" }
+  ],
+  sensivel: [
+    { etapa: "Limpeza", nome: "Sensibio H2O", marca: "Bioderma", uso: "manhã e noite", link: "https://s.shopee.com.br/30otUlxE7N" },
+    { etapa: "Hidratação", nome: "Sensibio Defensive, creme facial 40 ml", marca: "Bioderma", uso: "manhã e noite", link: "https://s.shopee.com.br/5fpeg0RSeT" },
+    { etapa: "Proteção solar", nome: "Birch Juice Moisturizing Sunscreen", marca: "Round Lab", uso: "todas as manhãs, reaplicar", link: "https://s.shopee.com.br/AKbUEkESJl" },
+    { etapa: "Tratamento", nome: "Madagascar Centella Ampoule", marca: "Skin1004", uso: "à noite", link: "https://s.shopee.com.br/3B8Jhhh2mA" }
+  ],
+  normal: [
+    { etapa: "Limpeza", nome: "Gel de Limpeza Facial", marca: "Principia", uso: "manhã e noite", link: "https://s.shopee.com.br/7AeSN1T5zm" },
+    { etapa: "Hidratação", nome: "Hidratante Facial", marca: "Principia", uso: "manhã e noite", link: "https://s.shopee.com.br/3LRjoDSpXX" },
+    { etapa: "Proteção solar", nome: "Protetor Solar Facial PS-01", marca: "Principia", uso: "todas as manhãs, reaplicar", link: "https://s.shopee.com.br/7VHIly6HXV" },
+    { etapa: "Tratamento", nome: "Sérum Vitamina C VC-10", marca: "Principia", uso: "pela manhã, antes do protetor", link: "https://s.shopee.com.br/Lo8Er9so3" }
+  ]
+};
+
+var FOCO = {
+  desidratacao: { etapa: "Desidratação", nome: "Dive-In, sérum de ácido hialurônico", marca: "Torriden", uso: "manhã e noite, sob o hidratante", link: "https://s.shopee.com.br/1W05hfl9uy" },
+  acne: { etapa: "Acne", nome: "BHA Blackhead Power Liquid", marca: "COSRX", uso: "à noite, uso gradual. Ativos mais fortes, só após avaliação profissional", link: "https://s.shopee.com.br/1W05iqDL6R" },
+  manchas: { etapa: "Manchas", nome: "Sérum Vitamina C VC-10", marca: "Principia", uso: "pela manhã, antes do protetor solar", link: "https://s.shopee.com.br/Lo8Er9so3" },
+  envelhecimento: { etapa: "Sinais de idade", nome: "Revive Serum Ginseng + Retinal", marca: "Beauty of Joseon", uso: "à noite, uso gradual", link: "https://s.shopee.com.br/80DZSrvNFW" }
+};
+/* ============================================================ */
+
+var TIPOS = {
+  oleosa: { nome: "Pele oleosa", desc: "Suas glândulas sebáceas produzem sebo em excesso, o que dá brilho, poros mais visíveis e tendência a cravos. Oleosa não significa que não precise de hidratação: ela precisa de textura leve e de uma limpeza que não agrida." },
+  seca: { nome: "Pele seca", desc: "Sua pele produz pouco óleo e perde água com facilidade. Por isso repuxa, fica áspera e pode descamar. O foco é reforçar a barreira com ceramidas e hidratantes mais ricos." },
+  mista: { nome: "Pele mista", desc: "A zona T (testa, nariz e queixo) fica oleosa, e as bochechas ficam normais ou secas. A rotina precisa equilibrar as duas áreas, com texturas leves e produtos usados onde cada região pede." },
+  sensivel: { nome: "Pele sensível", desc: "Sua pele reage com facilidade: arde, coça ou fica vermelha. Isso costuma indicar uma barreira fragilizada. A prioridade é uma rotina curta, sem fragrância e com ativos calmantes." },
+  normal: { nome: "Pele normal", desc: "Sua pele está equilibrada, sem excesso de oleosidade nem ressecamento. O melhor investimento é manter a barreira saudável, usar protetor solar todos os dias e prevenir." }
+};
+
+var CONCERNS = {
+  desidratacao: "Desidratação",
+  acne: "Tendência a acne",
+  manchas: "Manchas",
+  envelhecimento: "Sinais de envelhecimento"
+};
+
+var Q = [
+  { t: "No fim da tarde, sem maquiagem, sua pele…", o: [
+    { l: "Brilha no rosto inteiro", w: { o: 3 } },
+    { l: "Brilha só na testa e no nariz", w: { c: 3 } },
+    { l: "Fica confortável, sem brilho", w: {} },
+    { l: "Fica opaca, áspera ou repuxando", w: { d: 3 } } ] },
+  { t: "Logo depois de lavar o rosto, ela…", o: [
+    { l: "Repuxa e fica ressecada", w: { d: 2, h: 1 } },
+    { l: "Fica confortável", w: {} },
+    { l: "Está oleosa em poucas horas", w: { o: 2 } },
+    { l: "Fica oleosa na zona T e seca nas bochechas", w: { c: 2 } },
+    { l: "Fica vermelha ou arde", w: { s: 3 } } ] },
+  { t: "Com que frequência a pele arde, coça ou fica vermelha com produtos?", o: [
+    { l: "Com frequência", w: { s: 3 } },
+    { l: "Às vezes", w: { s: 1 } },
+    { l: "Raramente ou nunca", w: {} } ] },
+  { t: "E espinhas e cravos?", o: [
+    { l: "Várias por mês", w: { a: 3, o: 1 } },
+    { l: "De vez em quando, na zona T", w: { a: 1, c: 1 } },
+    { l: "Raramente", w: {} } ] },
+  { t: "Como estão as manchas no rosto?", o: [
+    { l: "Várias, e escurecem com o sol", w: { m: 3 } },
+    { l: "Algumas pequenas", w: { m: 1 } },
+    { l: "Quase nenhuma", w: {} } ] },
+  { t: "Linhas de expressão e firmeza", o: [
+    { l: "Linhas marcadas e perda de firmeza", w: { g: 3 } },
+    { l: "Linhas finas começando", w: { g: 1 } },
+    { l: "Ainda não percebo", w: {} } ] },
+  { id: "agua", t: "Quanta água você bebe por dia?", o: [
+    { l: "Menos de 1 litro", w: { h: 2 } },
+    { l: "Entre 1 e 2 litros", w: { h: 1 } },
+    { l: "Mais de 2 litros", w: {} } ] },
+  { id: "comida", t: "Como é a sua alimentação?", o: [
+    { l: "Muito açúcar, fritura e ultraprocessados", w: { a: 1, o: 1, g: 1 } },
+    { l: "Um pouco de tudo", w: {} },
+    { l: "Equilibrada, com frutas e vegetais", w: {} } ] },
+  { id: "sono", t: "Quantas horas você dorme por noite?", o: [
+    { l: "Menos de 6 horas", w: { g: 1, h: 1 } },
+    { l: "De 6 a 7 horas", w: {} },
+    { l: "7 horas ou mais", w: {} } ] },
+  { id: "sol", t: "Você usa protetor solar no rosto?", o: [
+    { l: "Todos os dias", w: {} },
+    { l: "Só na praia ou na piscina", w: { m: 1, g: 1 } },
+    { l: "Quase nunca", w: { m: 2, g: 2 } } ] },
+  { id: "rotina", t: "Qual é a sua rotina de cuidados hoje?", o: [
+    { l: "Só lavo o rosto", w: { h: 1 } },
+    { l: "Lavo e hidrato", w: {} },
+    { l: "Rotina completa, com ativos", w: {} } ] }
+];
+
+var state = { i: 0, ans: [], nome: "" };
+var $ = function (id) { return document.getElementById(id); };
+
+function show(name) {
+  ["intro", "quiz", "result"].forEach(function (s) { $(s).hidden = s !== name; });
+  window.scrollTo(0, 0);
+}
+
+function renderQ() {
+  var q = Q[state.i];
+  $("count").textContent = "Pergunta " + (state.i + 1) + " de " + Q.length;
+  $("fill").style.width = (state.i / Q.length * 100) + "%";
+  $("qtitle").textContent = q.t;
+  $("back").hidden = state.i === 0;
+  var box = $("opts");
+  box.innerHTML = "";
+  q.o.forEach(function (op, idx) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.textContent = op.l;
+    b.setAttribute("aria-pressed", state.ans[state.i] === idx ? "true" : "false");
+    b.addEventListener("click", function () { choose(idx); });
+    box.appendChild(b);
+  });
+}
+
+function choose(idx) {
+  state.ans[state.i] = idx;
+  renderQ();
+  var wait = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 200;
+  setTimeout(function () {
+    if (state.i < Q.length - 1) { state.i++; renderQ(); }
+    else { finish(); }
+  }, wait);
+}
+
+function score() {
+  var s = { o: 0, d: 0, c: 0, s: 0, h: 0, a: 0, m: 0, g: 0 };
+  Q.forEach(function (q, i) {
+    var w = q.o[state.ans[i]].w;
+    Object.keys(w).forEach(function (k) { s[k] += w[k]; });
+  });
+  var tipo;
+  if (s.s >= 3) tipo = "sensivel";
+  else {
+    var best = "o", max = s.o;
+    if (s.c > max) { best = "c"; max = s.c; }
+    if (s.d > max) { best = "d"; max = s.d; }
+    tipo = max < 2 ? "normal" : { o: "oleosa", c: "mista", d: "seca" }[best];
+  }
+  var focos = [];
+  if (s.h >= 3) focos.push("desidratacao");
+  if (s.a >= 3) focos.push("acne");
+  if (s.m >= 2) focos.push("manchas");
+  if (s.g >= 2) focos.push("envelhecimento");
+  return { tipo: tipo, focos: focos, s: s };
+}
+
+function habits() {
+  var out = [];
+  var pick = function (id) {
+    for (var i = 0; i < Q.length; i++) if (Q[i].id === id) return state.ans[i];
+  };
+  if (pick("agua") === 0) out.push("Aumente a água aos poucos até chegar perto de 2 litros por dia. A hidratação começa de dentro.");
+  if (pick("comida") === 0) out.push("Troque parte dos ultraprocessados e do açúcar por frutas, legumes e boas gorduras. Isso ajuda oleosidade e acne.");
+  if (pick("sono") === 0) out.push("Durma perto de 7 horas. É durante o sono que a pele se renova.");
+  if (pick("sol") !== 0) out.push("O protetor solar vale todos os dias, mesmo em dia nublado ou dentro de casa perto de janelas.");
+  if (pick("rotina") === 0) out.push("Comece simples: limpar, hidratar e proteger. Só depois acrescente ativos.");
+  return out;
+}
+
+function rowHtml(p) {
+  var li = document.createElement("li");
+  li.className = "item";
+  var info = document.createElement("div");
+  info.className = "info";
+  var e = document.createElement("span"); e.className = "etapa"; e.textContent = p.etapa;
+  var n = document.createElement("strong"); n.textContent = p.nome;
+  var m = document.createElement("small"); m.textContent = p.marca + " · " + p.uso;
+  info.appendChild(e); info.appendChild(n); info.appendChild(m);
+  li.appendChild(info);
+  if (p.link) {
+    var a = document.createElement("a");
+    a.className = "btn small"; a.textContent = "Ver na Shopee";
+    a.href = p.link; a.target = "_blank"; a.rel = "noopener sponsored";
+    li.appendChild(a);
+  } else {
+    var s = document.createElement("span"); s.className = "soon"; s.textContent = "Link em breve";
+    li.appendChild(s);
+  }
+  return li;
+}
+
+function finish() {
+  $("fill").style.width = "100%";
+  var r = score();
+  var t = TIPOS[r.tipo];
+  $("rkicker").textContent = state.nome ? "Resultado de " + state.nome : "Seu resultado";
+  $("rtype").textContent = t.nome;
+  $("rdesc").textContent = t.desc;
+  var chips = $("rchips"); chips.innerHTML = "";
+  r.focos.forEach(function (f) {
+    var c = document.createElement("span"); c.className = "chip"; c.textContent = CONCERNS[f]; chips.appendChild(c);
+  });
+  chips.hidden = r.focos.length === 0;
+  var h = habits(), hl = $("rhabits"); hl.innerHTML = "";
+  h.forEach(function (x) { var li = document.createElement("li"); li.textContent = x; hl.appendChild(li); });
+  $("rhabits-card").hidden = h.length === 0;
+  var base = $("rbase"); base.innerHTML = "";
+  PRODUTOS[r.tipo].forEach(function (p) { base.appendChild(rowHtml(p)); });
+  var fl = $("rfocus"); fl.innerHTML = "";
+  r.focos.forEach(function (f) { fl.appendChild(rowHtml(FOCO[f])); });
+  $("rfocus-card").hidden = r.focos.length === 0;
+  var cta = $("rcta-btns"); cta.innerHTML = "";
+  [["Consulta online", AGENDA_ONLINE_URL], ["Consulta presencial", AGENDA_PRESENCIAL_URL]].forEach(function (c) {
+    var el;
+    if (c[1]) {
+      el = document.createElement("a");
+      el.className = "btn"; el.href = c[1]; el.target = "_blank"; el.rel = "noopener";
+    } else {
+      el = document.createElement("span");
+      el.className = "soon";
+    }
+    el.textContent = c[1] ? c[0] : c[0] + ": link em breve";
+    cta.appendChild(el);
+  });
+  show("result");
+}
+
+$("start").addEventListener("click", function () {
+  state = { i: 0, ans: [], nome: $("nome").value.trim() };
+  show("quiz"); renderQ();
+});
+$("back").addEventListener("click", function () {
+  if (state.i > 0) { state.i--; renderQ(); }
+});
+$("again").addEventListener("click", function () { show("intro"); });
+</script>
+
+</body>
+</html>
