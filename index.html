@@ -6,6 +6,7 @@
 <style>:root{color-scheme:light}body{margin:0}</style>
 <title>Skin Intelligence HomeCare</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700&display=swap">
@@ -107,7 +108,19 @@ input[type=text] {
 <main class="wrap">
   <div class="brand"><div class="mono" aria-hidden="true">R</div><span>Dra. Renata Biolchi</span></div>
 
-  <section id="intro" class="wrap" style="gap:24px">
+  <section id="gate" class="wrap" style="gap:24px">
+    <h1>Skin Intelligence HomeCare</h1>
+    <p class="lead">Digite o código de acesso que você recebeu por e-mail depois da compra.</p>
+    <form class="card" id="gate-form" autocomplete="off">
+      <label class="field" for="codigo">Código de acesso
+        <input id="codigo" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="Digite o código">
+      </label>
+      <p class="fine" id="gate-err" role="alert" hidden>Código incorreto. Confira o e-mail da compra e tente de novo.</p>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+  </section>
+
+  <section id="intro" class="wrap" style="gap:24px" hidden>
     <h1>Skin Intelligence HomeCare</h1>
     <p class="lead">Pele não se trata por tentativa. Se trata com inteligência. Responda 11 perguntas rápidas e descubra seu tipo de pele e os produtos certos para a sua rotina.</p>
     <div class="card">
@@ -169,6 +182,7 @@ input[type=text] {
    3) Links de consulta: cole o link do WhatsApp ou da agenda de cada
       modalidade. Enquanto estiver vazio, aparece "Link em breve".
    ============================================================ */
+var ACCESS_CODE = "SKIN-RB26";   // código que a cliente recebe depois da compra (troque aqui se quiser)
 var AGENDA_ONLINE_URL = "https://wa.me/5554999136522?text=" + encodeURIComponent("Oi, Dra. Renata! Fiz o diagnóstico de pele e quero agendar uma consulta online.");
 var AGENDA_PRESENCIAL_URL = "https://wa.me/5554999136522?text=" + encodeURIComponent("Oi, Dra. Renata! Fiz o diagnóstico de pele e quero agendar uma consulta presencial.");
 
@@ -282,7 +296,7 @@ var state = { i: 0, ans: [], nome: "" };
 var $ = function (id) { return document.getElementById(id); };
 
 function show(name) {
-  ["intro", "quiz", "result"].forEach(function (s) { $(s).hidden = s !== name; });
+  ["gate", "intro", "quiz", "result"].forEach(function (s) { $(s).hidden = s !== name; });
   window.scrollTo(0, 0);
 }
 
@@ -416,6 +430,20 @@ $("back").addEventListener("click", function () {
   if (state.i > 0) { state.i--; renderQ(); }
 });
 $("again").addEventListener("click", function () { show("intro"); });
+
+function norm(v) { return String(v || "").trim().toUpperCase().replace(/\s+/g, ""); }
+function unlocked() { try { return localStorage.getItem("sihc_ok") === norm(ACCESS_CODE); } catch (e) { return false; } }
+$("gate-form").addEventListener("submit", function (ev) {
+  ev.preventDefault();
+  if (norm($("codigo").value) === norm(ACCESS_CODE)) {
+    try { localStorage.setItem("sihc_ok", norm(ACCESS_CODE)); } catch (e) {}
+    $("gate-err").hidden = true;
+    show("intro");
+  } else {
+    $("gate-err").hidden = false;
+  }
+});
+if (unlocked()) { show("intro"); }
 </script>
 
 </body>
